@@ -1,52 +1,47 @@
 // import React and ReactDOM libs
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Faker from 'faker';
-import CommentDetail from './CommentDetail';
-import ApprovalCard from './ApprovalCard';
+import SeasonDisplay from './SeasonDisplay';
+import Spinner from './Spinner';
 
 // Create React component
-const App = () =>
+class App extends React.Component
 {
-	return(
-		<div className="ui container comments">
+	state = {lat: null, errorMessage: ''};
 
-			<ApprovalCard>
-				<div>
-					<h4>WARNING!</h4>
-					Are you sure you want to do this?
-				</div>
-			</ApprovalCard>
+	componentDidMount()
+	{
+		window.navigator.geolocation.getCurrentPosition(
+			position => this.setState({lat: position.coords.latitude}),
+			err => this.setState({errorMessage: err.message})
+		);
+	}
 
-			<ApprovalCard>
-				<CommentDetail 
-					author="Sam" 
-					timePosted="Today at 4:20pm" 
-					content="Nice cock!" 
-					avatar={Faker.image.avatar()} 
-				/>
-			</ApprovalCard>
+	renderContent() 
+	{
+		if(this.state.errorMessage && !this.state.lat)
+		{
+			return <div>Error: {this.state.errorMessage}</div>;
+		}
 
-			<ApprovalCard>
-				<CommentDetail 
-					author="Alex" 
-					timePosted="Today at 2:30am" 
-					content="Sick bobs" 
-					avatar={Faker.image.avatar()} 
-				/>
-			</ApprovalCard>
+		else if(!this.state.errorMessage && this.state.lat)
+		{
+			return <SeasonDisplay lat={this.state.lat} />;
+		}
 
-			<ApprovalCard>
-				<CommentDetail 
-					author="Jane" 
-					timePosted="3 days ago" 
-					content="420" 
-					avatar={Faker.image.avatar()} 
-				/>
-			</ApprovalCard>
-		</div>
-	);
-};
+		return <Spinner message="Please accept location request" />;
+	}
+
+	// this method is required
+	render()
+	{
+		return(
+			<div className='border red'>
+				{this.renderContent()}
+			</div>
+		);
+	}
+}
 
 // take react component and show to screen
 ReactDOM.render(<App />, document.querySelector('#root'));
