@@ -1,7 +1,7 @@
 // import React and ReactDOM libs
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App';
+import App from './App';
 
 // Create React component
 
