@@ -4,6 +4,7 @@ import axios from 'axios';
 const Search = () =>
 {
     const [term, setTerm] = useState('programming');
+    const [debouncedTerm, setDebouncedTerm] = useState(term);
     const [results, setResults] = useState([]);
 
     /* 
@@ -15,9 +16,26 @@ const Search = () =>
                                                 if data has changed since 
                                                 last render
     */
+
+    // term useEffect
+    useEffect(() => 
+    {
+        const timerId = setTimeout(() => {
+            setDebouncedTerm(term);
+        }, 1000);
+
+        return () =>
+        {
+            clearTimeout(timerId);
+        };
+
+    }, [term]);
+
+    // debouncedTerm useEffect
     useEffect(() =>
     {
         // queries Wikipedia API
+
         const search = async () =>
         {
             const { data } = await axios.get('https://en.wikipedia.org/w/api.php', {
@@ -26,19 +44,28 @@ const Search = () =>
                     list: 'search',
                     origin: '*',
                     format: 'json',
-                    srsearch: term,
+                    srsearch: debouncedTerm,
                 },
             });
             setResults(data.query.search);
         };
 
         search();
-    }, [term]);
+        
+    }, [debouncedTerm]);
 
     const renderedResults = results.map((result) => 
     {
         return (
             <div key={result.pageid} className='item'>
+                <div className='right floated content'>
+                    <a 
+                        className='ui button'
+                        href={`https://en.wikipedia.org?curid=${result.pageid}`}
+                        >
+                            Go
+                    </a>
+                </div>
                 <div className='content'>
                     <div className='header'>{result.title}</div>
                     <span dangerouslySetInnerHTML={{ __html: result.snippet }}></span>
