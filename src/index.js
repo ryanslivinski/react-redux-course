@@ -1,9 +1,17 @@
 // import React and ReactDOM libs
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 
-// Create React component
+import App from './components/App';
+import reducers from './reducers';
+
 
 // take react component and show to screen
-ReactDOM.render(<App />, document.querySelector('#root'));
+ReactDOM.render(
+    <Provider store={createStore(reducers)}>
+        <App />
+    </Provider>,
+    document.querySelector('#root')
+);
