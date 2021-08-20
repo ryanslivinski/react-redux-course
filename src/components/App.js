@@ -1,10 +1,11 @@
 import React from 'react';
+import PostList from './PostList';
 
 const App = () =>
 {
     return (
-        <div>
-            Example of Redux store from codepenio (video 226)
+        <div className='ui container'>
+            <PostList />
         </div>
     );
 };
