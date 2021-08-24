@@ -1,29 +1,29 @@
 import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
+import StreamCreate from './streams/StreamCreate';
+import StreamDelete from './streams/StreamDelete';
+import StreamEdit from './streams/StreamEdit';
+import StreamShow from './streams/StreamShow';
+import StreamList from './streams/StreamList';
+import Header from './Header';
 
-const PageOne = () =>
-{
-    return <div>PageOne</div>
-};
-
-const PageTwo = () =>
-{
-    return(
-        <div>
-            PageTwo
-            <button>Click me</button>
-        </div>
-    ); 
-};
+/*
+    Client ID
+    827595626669-hith5id52cf3r44qlbt1fvgia18asj6h.apps.googleusercontent.com
+*/
 
 const App = () =>
 {
     return (
-        <div>
+        <div className='ui container'>
             <BrowserRouter>
                 <div>
-                    <Route path='/' exact component={PageOne} />
-                    <Route path='/pagetwo' component={PageTwo} />
+                    <Header />
+                    <Route path='/' exact component={StreamList} />
+                    <Route path='/streams/new' exact component={StreamCreate} />
+                    <Route path='/streams/edit' exact component={StreamEdit} />
+                    <Route path='/streams/delete' exact component={StreamDelete} />
+                    <Route path='/streams/show' exact component={StreamShow} />
                 </div>
             </BrowserRouter>
         </div>
